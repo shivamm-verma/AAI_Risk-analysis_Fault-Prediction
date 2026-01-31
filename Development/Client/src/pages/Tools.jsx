@@ -7,6 +7,7 @@ import {
   ShieldCheck,
   AlertTriangle,
   ArrowRight,
+  CheckCircle,
 } from 'lucide-react'
 
 function Tools() {
@@ -14,124 +15,123 @@ function Tools() {
   const [selectedFile, setSelectedFile] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isUploadSuccess, setIsUploadSuccess] = useState(false)
 
-  const apiBaseUrl = useMemo(() => {
-    return import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
-  }, [])
+  const apiBaseUrl = useMemo(
+    () => import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000',
+    []
+  )
 
   const resetError = () => setErrorMessage('')
 
   const validateCsv = (file) => {
-    if (!file) {
-      return 'Please select a CSV file.'
-    }
-
-    const isCsvExtension = file.name.toLowerCase().endsWith('.csv')
-    const isCsvMime = file.type === 'text/csv' || file.type === 'application/vnd.ms-excel'
-
-    if (!isCsvExtension && !isCsvMime) {
-      return 'Only CSV files are allowed.'
-    }
-
-    return ''
+    if (!file) return 'Please select a CSV file.'
+    const ok =
+      file.name.toLowerCase().endsWith('.csv') ||
+      file.type === 'text/csv' ||
+      file.type === 'application/vnd.ms-excel'
+    return ok ? '' : 'Only CSV files are allowed.'
   }
 
-  const handleFileChange = (event) => {
+  const handleFileChange = (e) => {
     resetError()
-    const file = event.target.files?.[0]
-    const validationError = validateCsv(file)
-
-    if (validationError) {
+    const file = e.target.files?.[0]
+    const err = validateCsv(file)
+    if (err) {
       setSelectedFile(null)
-      setErrorMessage(validationError)
-      event.target.value = ''
+      setErrorMessage(err)
+      e.target.value = ''
       return
     }
-
     setSelectedFile(file)
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     resetError()
 
-    const validationError = validateCsv(selectedFile)
-    if (validationError) {
-      setErrorMessage(validationError)
-      return
-    }
+    const err = validateCsv(selectedFile)
+    if (err) return setErrorMessage(err)
 
     try {
       setIsSubmitting(true)
+      setIsUploadSuccess(false)
 
-      const formData = new FormData()
-      formData.append('file', selectedFile)
+      const fd = new FormData()
+      fd.append('file', selectedFile)
 
-      const response = await axios.post(`${apiBaseUrl}/predict`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      const res = await axios.post(`${apiBaseUrl}/predict`, fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       })
 
-      const result = response.data
-      sessionStorage.setItem('predictionResult', JSON.stringify(result))
-
-      navigate('/dashboard', {
-        state: {
-          result,
-          fileName: selectedFile.name,
-        },
-      })
-    } catch (error) {
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
-        'Unable to process the CSV right now. Please try again.'
-      setErrorMessage(message)
+      sessionStorage.setItem('predictionResult', JSON.stringify(res.data))
+      setIsUploadSuccess(true)
+    } catch (e) {
+      setErrorMessage(
+        e?.response?.data?.message ||
+          e?.message ||
+          'Unable to process the CSV right now. Please try again.'
+      )
     } finally {
       setIsSubmitting(false)
     }
   }
 
+  const handleGoToDashboard = () => {
+    const stored = sessionStorage.getItem('predictionResult')
+    if (stored) {
+      navigate('/dashboard', {
+        state: { result: JSON.parse(stored), fileName: selectedFile.name },
+      })
+    }
+  }
+
   return (
-    <div className="bg-slate-50">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+    <div className="bg-slate-50 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid gap-8 lg:gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          {/* LEFT */}
           <div className="space-y-6">
-            <div className="flex items-center gap-3 text-blue-900">
-              <ShieldCheck className="w-9 h-9" />
+            <div className="flex items-start sm:items-center gap-3 text-blue-900">
+              <ShieldCheck className="w-8 h-8 sm:w-9 sm:h-9" />
               <div>
-                <h1 className="text-4xl font-bold">Risk Analysis Toolkit</h1>
-                <p className="text-lg text-gray-700 mt-2">
+                <h1 className="text-2xl sm:text-4xl font-bold">
+                  Risk Analysis Toolkit
+                </h1>
+                <p className="text-sm sm:text-lg text-gray-700 mt-2">
                   Upload a single CSV file to generate fault predictions and risk insights.
                 </p>
               </div>
             </div>
 
-            <div className="rounded-2xl border border-blue-100 bg-white p-6 shadow-sm">
-              <h2 className="text-xl font-semibold text-blue-900 mb-2">How it works</h2>
-              <ul className="space-y-3 text-gray-700">
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 h-2 w-2 rounded-full bg-blue-600" />
+            <div className="rounded-2xl border border-blue-100 bg-white p-4 sm:p-6 shadow-sm">
+              <h2 className="text-lg sm:text-xl font-semibold text-blue-900 mb-2">
+                How it works
+              </h2>
+              <ul className="space-y-3 text-sm sm:text-base text-gray-700">
+                <li className="flex gap-3">
+                  <span className="mt-2 h-2 w-2 rounded-full bg-blue-600" />
                   Prepare a clean CSV with system telemetry and fault signals.
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 h-2 w-2 rounded-full bg-blue-600" />
+                <li className="flex gap-3">
+                  <span className="mt-2 h-2 w-2 rounded-full bg-blue-600" />
                   Submit the CSV to the ML model for prediction.
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 h-2 w-2 rounded-full bg-blue-600" />
+                <li className="flex gap-3">
+                  <span className="mt-2 h-2 w-2 rounded-full bg-blue-600" />
                   View results instantly on the dashboard with actionable insights.
                 </li>
               </ul>
             </div>
 
-            <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 p-6 text-white shadow-lg">
-              <div className="flex items-start gap-4">
-                <UploadCloud className="w-10 h-10" />
+            <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 p-4 sm:p-6 text-white shadow-lg">
+              <div className="flex gap-4">
+                <UploadCloud className="w-8 h-8 sm:w-10 sm:h-10" />
                 <div>
-                  <h3 className="text-xl font-semibold">Upload Requirements</h3>
-                  <p className="text-sm text-blue-100 mt-1">
+                  <h3 className="text-lg sm:text-xl font-semibold">
+                    Upload Requirements
+                  </h3>
+                  <p className="text-xs sm:text-sm text-blue-100 mt-1">
                     Only one CSV file can be uploaded at a time. Maximum 50MB recommended.
                   </p>
                 </div>
@@ -139,16 +139,17 @@ function Tools() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-blue-100 bg-white p-6 shadow-sm">
+          {/* RIGHT */}
+          <div className="rounded-2xl border border-blue-100 bg-white p-4 sm:p-6 shadow-sm">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="flex items-center gap-3 text-blue-900">
-                <FileText className="w-7 h-7" />
-                <h2 className="text-2xl font-semibold">Upload CSV</h2>
+                <FileText className="w-6 h-6 sm:w-7 sm:h-7" />
+                <h2 className="text-xl sm:text-2xl font-semibold">Upload CSV</h2>
               </div>
 
               <label className="block">
                 <span className="text-sm font-medium text-gray-700">CSV file</span>
-                <div className="mt-3 rounded-xl border-2 border-dashed border-blue-200 bg-blue-50/60 p-6 text-center">
+                <div className="mt-3 rounded-xl border-2 border-dashed border-blue-200 bg-blue-50/60 p-4 sm:p-6 text-center">
                   <input
                     type="file"
                     accept=".csv,text/csv"
@@ -162,29 +163,49 @@ function Tools() {
               </label>
 
               {selectedFile && (
-                <div className="rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm text-blue-900">
-                  <div className="flex items-center justify-between gap-3">
+                <div className="rounded-xl border border-blue-100 bg-blue-50 p-3 sm:p-4 text-sm text-blue-900">
+                  <div className="flex justify-between gap-3">
                     <span className="font-semibold">Selected:</span>
-                    <span className="truncate text-gray-700">{selectedFile.name}</span>
+                    <span className="truncate text-gray-700">
+                      {selectedFile.name}
+                    </span>
                   </div>
                 </div>
               )}
 
               {errorMessage && (
-                <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-                  <AlertTriangle className="mt-0.5 h-4 w-4" />
+                <div className="flex gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                  <AlertTriangle className="h-4 w-4 mt-0.5" />
                   <span>{errorMessage}</span>
+                </div>
+              )}
+
+              {isUploadSuccess && (
+                <div className="flex gap-2 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-700">
+                  <CheckCircle className="h-4 w-4 mt-0.5" />
+                  <span>CSV uploaded successfully! Results are ready.</span>
                 </div>
               )}
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-800 px-6 py-3 text-white font-semibold shadow-md transition hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-70"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-800 px-6 py-3 text-white font-semibold shadow-md hover:bg-blue-900 disabled:opacity-70"
               >
                 {isSubmitting ? 'Uploading...' : 'Send to ML Model'}
                 <ArrowRight className="h-4 w-4" />
               </button>
+
+              {isUploadSuccess && (
+                <button
+                  type="button"
+                  onClick={handleGoToDashboard}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-6 py-3 text-white font-semibold shadow-md hover:bg-green-700"
+                >
+                  View Results
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              )}
             </form>
           </div>
         </div>

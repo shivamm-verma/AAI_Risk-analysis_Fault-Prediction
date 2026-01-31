@@ -74,7 +74,7 @@ export default function Dashboard() {
               <FileCheck2 className="h-6 w-6" />
               <h2 className="text-lg font-semibold">Prediction Output</h2>
             </div>
-            <div className="mt-3 text-sm text-gray-700 whitespace-pre-wrap break-words">
+            <div className="mt-3 text-sm text-gray-700 whitespace-pre-wrap wrap-break-word">
               {dashboardData?.prediction || dashboardData?.result || 'Prediction output will be listed here.'}
             </div>
           </div>

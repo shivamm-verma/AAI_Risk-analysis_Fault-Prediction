@@ -1,3 +1,0 @@
-Work to be started...
-
-![](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGpyeXN3YTZia2F1aDFmZ2gyNjhqcm9yNTVlM3FkaGlibWxpNnJ2OCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7bu3XilJ5BOiSGic/giphy.gif)
