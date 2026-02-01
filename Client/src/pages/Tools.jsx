@@ -124,7 +124,7 @@ function Tools() {
               </ul>
             </div>
 
-            <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 p-4 sm:p-6 text-white shadow-lg">
+            <div className="rounded-2xl bg-linear-to-br from-blue-600 to-blue-900 p-4 sm:p-6 text-white shadow-lg">
               <div className="flex gap-4">
                 <UploadCloud className="w-8 h-8 sm:w-10 sm:h-10" />
                 <div>
