@@ -16,7 +16,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="bg-gradient-to-r from-blue-400 to-blue-800 text-white py-12">
+    <div className="bg-linear-to-r from-blue-400 to-blue-800 text-white py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* Main Carousel */}
         <div

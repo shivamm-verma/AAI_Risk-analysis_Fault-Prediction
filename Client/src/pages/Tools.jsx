@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import {
@@ -13,6 +13,9 @@ import {
 function Tools() {
   const navigate = useNavigate()
   const [selectedFile, setSelectedFile] = useState(null)
+  const [modelName, setModelName] = useState('pickle_example')
+  const [availableModels, setAvailableModels] = useState([])
+  const [modelsError, setModelsError] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isUploadSuccess, setIsUploadSuccess] = useState(false)
@@ -23,6 +26,39 @@ function Tools() {
   )
 
   const resetError = () => setErrorMessage('')
+
+  useEffect(() => {
+    let isMounted = true
+
+    const fetchModels = async () => {
+      try {
+        setModelsError('')
+        const res = await axios.get(`${apiBaseUrl}/models`)
+        const models = res?.data?.models || []
+        if (!isMounted) return
+        setAvailableModels(models)
+        if (models.length > 0 && !models.includes(modelName)) {
+          setModelName(models[0])
+        }
+        if (models.length === 0) {
+          setModelsError(
+            'No models found on the backend. Add a .pkl file in the Model folder and restart the server.'
+          )
+        }
+      } catch (e) {
+        if (!isMounted) return
+        setModelsError(
+          e?.response?.data?.detail ||
+            'Unable to fetch models from backend. Ensure the API is running.'
+        )
+      }
+    }
+
+    fetchModels()
+    return () => {
+      isMounted = false
+    }
+  }, [apiBaseUrl, modelName])
 
   const validateCsv = (file) => {
     if (!file) return 'Please select a CSV file.'
@@ -52,6 +88,12 @@ function Tools() {
 
     const err = validateCsv(selectedFile)
     if (err) return setErrorMessage(err)
+    if (!modelName) return setErrorMessage('Please enter a model name.')
+    if (availableModels.length === 0) {
+      return setErrorMessage(
+        'No models are available on the backend. Add a .pkl file in the Model folder.'
+      )
+    }
 
     try {
       setIsSubmitting(true)
@@ -60,7 +102,7 @@ function Tools() {
       const fd = new FormData()
       fd.append('file', selectedFile)
 
-      const res = await axios.post(`${apiBaseUrl}/predict`, fd, {
+      const res = await axios.post(`${apiBaseUrl}/predict/${modelName}`, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
 
@@ -69,6 +111,7 @@ function Tools() {
     } catch (e) {
       setErrorMessage(
         e?.response?.data?.message ||
+          e?.response?.data?.detail ||
           e?.message ||
           'Unable to process the CSV right now. Please try again.'
       )
@@ -124,7 +167,7 @@ function Tools() {
               </ul>
             </div>
 
-            <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 p-4 sm:p-6 text-white shadow-lg">
+            <div className="rounded-2xl bg-linear-to-br from-blue-600 to-blue-900 p-4 sm:p-6 text-white shadow-lg">
               <div className="flex gap-4">
                 <UploadCloud className="w-8 h-8 sm:w-10 sm:h-10" />
                 <div>
@@ -162,6 +205,38 @@ function Tools() {
                 </div>
               </label>
 
+              <label className="block">
+                <span className="text-sm font-medium text-gray-700">Model name</span>
+                {availableModels.length > 0 ? (
+                  <select
+                    value={modelName}
+                    onChange={(e) => setModelName(e.target.value)}
+                    className="mt-2 w-full rounded-lg border border-blue-100 px-3 py-2 text-sm"
+                  >
+                    {availableModels.map((model) => (
+                      <option key={model} value={model}>
+                        {model}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    value={modelName}
+                    onChange={(e) => setModelName(e.target.value)}
+                    className="mt-2 w-full rounded-lg border border-blue-100 px-3 py-2 text-sm"
+                    placeholder="e.g. pickle_example"
+                  />
+                )}
+              </label>
+
+              {modelsError && (
+                <div className="flex gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700">
+                  <AlertTriangle className="h-4 w-4 mt-0.5" />
+                  <span>{modelsError}</span>
+                </div>
+              )}
+
               {selectedFile && (
                 <div className="rounded-xl border border-blue-100 bg-blue-50 p-3 sm:p-4 text-sm text-blue-900">
                   <div className="flex justify-between gap-3">
@@ -189,7 +264,7 @@ function Tools() {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || availableModels.length === 0}
                 className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-800 px-6 py-3 text-white font-semibold shadow-md hover:bg-blue-900 disabled:opacity-70"
               >
                 {isSubmitting ? 'Uploading...' : 'Send to ML Model'}

@@ -9,7 +9,7 @@ function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
 
           {/* Important Links */}
-          <div className="break-words">
+          <div className="wrap-break-word">
             <h3 className="font-bold text-base mb-4">IMPORTANT LINKS</h3>
             <ul className="space-y-2 text-sm">
               {[
@@ -26,14 +26,14 @@ function Footer() {
                 'FTO Slot Portal',
               ].map(item => (
                 <li key={item}>
-                  <a href="#" className="hover:underline break-words">{item}</a>
+                  <a href="#" className="hover:underline wrap-break-word">{item}</a>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Media */}
-          <div className="break-words">
+          <div className="wrap-break-word">
             <h3 className="font-bold text-base mb-4">MEDIA</h3>
             <ul className="space-y-2 text-sm">
               {['Press Releases', 'Latest News', 'Coverage', 'Photo Gallery'].map(item => (
@@ -45,7 +45,7 @@ function Footer() {
           </div>
 
           {/* Training Centres */}
-          <div className="break-words">
+          <div className="wrap-break-word">
             <h3 className="font-bold text-base mb-4">TRAINING CENTRES</h3>
             <ul className="space-y-2 text-sm">
               {[
@@ -56,14 +56,14 @@ function Footer() {
                 'Aviation Security Training Institute (ASTI)',
               ].map(item => (
                 <li key={item}>
-                  <a href="#" className="hover:underline break-words">{item}</a>
+                  <a href="#" className="hover:underline wrap-break-word">{item}</a>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Corporate Address */}
-          <div className="break-words">
+          <div className="wrap-break-word">
             <h3 className="font-bold text-base mb-4">CORPORATE ADDRESS</h3>
             <p className="text-sm leading-relaxed">
               Airports Authority of India,<br />
@@ -81,7 +81,7 @@ function Footer() {
         </div>
 
         {/* Bottom Footer */}
-        <div className="border-t border-blue-700 pt-6 text-xs text-center space-y-3 break-words">
+        <div className="border-t border-blue-700 pt-6 text-xs text-center space-y-3 wrap-break-word">
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
             {[
               'Right to Information',
