@@ -11,4 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Render Backend
-        run: curl -s https://aai-risk-analysis-fault-prediction.onrender.com
+        run: curl -s https://aai-risk-analysis-fault-prediction.onrender.com/health
