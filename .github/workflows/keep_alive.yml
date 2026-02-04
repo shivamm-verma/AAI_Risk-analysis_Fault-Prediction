@@ -3,7 +3,7 @@ on:
   schedule:
     # Runs every 14 minutes
     # - cron: '0 * * * *' # Runs once every hour instead of every 14 mins, if want to disable frequent pings
-    - cron: '*/14 * * * *'
+    - cron: '0,14,28,42,56 * * * *'
   workflow_dispatch: # Allows manual trigger for testing
 
 jobs:
