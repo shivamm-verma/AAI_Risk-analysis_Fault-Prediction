@@ -5,13 +5,13 @@ import { ChevronDown, Home, Info, Briefcase, Settings } from 'lucide-react'
 const navigation = [
   { label: 'HOME', href: '/', icon: Home },
   { label: 'ABOUT US', href: '/about', icon: Info },
-  { label: 'BUSINESS INFO', href: '/business', icon: Briefcase },
-  { label: 'SERVICES', href: '/services', icon: Settings },
-  { label: 'TENDER', href: '/tenders', icon: Settings },
-  { label: 'VIGILANCE', href: '/vigilance', icon: Settings },
-  { label: 'PUBLIC INFO', href: '/public-info', icon: Info },
-  { label: 'CSR', href: '/csr', icon: Info },
-  { label: 'AAI AIRPORTS', href: '/airports', icon: Home },
+  { label: 'BUSINESS INFO', href: '#', icon: Briefcase },
+  { label: 'SERVICES', href: '#', icon: Settings },
+  { label: 'TENDER', href: '#', icon: Settings },
+  { label: 'VIGILANCE', href: '#', icon: Settings },
+  { label: 'PUBLIC INFO', href: '#', icon: Info },
+  { label: 'CSR', href: '#', icon: Info },
+  { label: 'AAI AIRPORTS', href: '#', icon: Home },
   { label: 'TOOLS', href: '/tools', icon: Settings },
 ]
 
