@@ -160,16 +160,16 @@ Get-PSTree -Recurse -Exclude "node_modules", ".venv", "__pycache__" | Select-Obj
 
 <!-- EDIT THIS AFTER TECH STACK FINALLING -->
 
-<!-- ### Machine Learning
+### Machine Learning
 - **Python** - Core ML development
+- **Pickle** - Reading & writing of the model
 - **Scikit-learn** - Model training and evaluation
 - **Pandas & NumPy** - Data processing and analysis
-- **TensorFlow/PyTorch** - Deep learning models (if applicable)
+- **TensorFlow** - Deep learning models 
 
 ### Backend
-- **Flask/FastAPI** - API framework
-- **SQLite/PostgreSQL** - Data storage
-- **Joblib/Pickle** - Model serialization -->
+- **FastAPI** - API framework
+- **Joblib/Pickle** - Model serialization
 
 ### Frontend
 - **React** - User interface
@@ -177,7 +177,11 @@ Get-PSTree -Recurse -Exclude "node_modules", ".venv", "__pycache__" | Select-Obj
 - **Axios** - API communication
 <!-- - **Chart.js/D3.js** - Data visualization -->
 
-- More tech stack will be revealed soon.
+### Deployment
+- **Frontend** - [Vercel](https://vercel.com)
+- **Backend** - [Render](https://render.com/)
+<!-- - **Chart.js/D3.js** - Data visualization -->
+
 
 <!-- ### DevOps
 - **Git** - Version control
@@ -195,7 +199,7 @@ Get-PSTree -Recurse -Exclude "node_modules", ".venv", "__pycache__" | Select-Obj
 <!-- ```bash
 # Clone the repository
 git clone https://github.com/shivamm-verma/AAI_Risk-analysis_Fault-Prediction.git
-cd <project-directory>
+cd AAI_Risk-analysis_Fault-Prediction
 
 # Install dependencies
 pip install -r requirements.txt
