@@ -64,6 +64,10 @@ AAI_Risk analysis_Fault Prediction
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── ReadMe.md
+├── .github
+│   └── workflows
+│       ├── keep_alive.yml
+│       └── WORKFLOW_GUIDE.md
 ├── Client
 │   ├── .env.local
 │   ├── .env.production
@@ -94,17 +98,44 @@ AAI_Risk analysis_Fault Prediction
 │           └── Tools.jsx
 ├── Model
 │   ├── durability.pkl
+│   ├── LandingGearRUL.pkl
 │   ├── dataset
-│   │   └── aerospace_structural_design_dataset.csv
-│   └── Jupyter Notebook
-│       ├── durabilityrequirements.txt
-│       └── structural_integrity.ipynb
+│   │   ├── aerospace_structural_design_dataset.csv
+│   │   ├── LandingGear_Balanced_Dataset.csv
+│   │   └── CMAPSSData
+│   │       ├── Damage Propagation Modeling.pdf
+│   │       ├── readme.txt
+│   │       ├── RUL_FD001.txt
+│   │       ├── RUL_FD002.txt
+│   │       ├── RUL_FD003.txt
+│   │       ├── RUL_FD004.txt
+│   │       ├── test_FD001.txt
+│   │       ├── test_FD002.txt
+│   │       ├── test_FD003.txt
+│   │       ├── test_FD004.txt
+│   │       ├── train_FD001.txt
+│   │       ├── train_FD002.txt
+│   │       ├── train_FD003.txt
+│   │       ├── train_FD004.txt
+│   │       └── .ipynb_checkpoints
+│   │           └── train_FD001-checkpoint.txt
+│   ├── Jupyter Notebook
+│   │   ├── durabilityrequirements.txt
+│   │   ├── LandingGear.ipynb
+│   │   ├── remaining_useful_life.ipynb
+│   │   └── structural_integrity.ipynb
+│   └── rul_lstm_model
+│       ├── fingerprint.pb
+│       ├── keras_metadata.pb
+│       ├── saved_model.pb
+│       └── variables
+│           ├── variables.data-00000-of-00001
+│           └── variables.index
 └── Server
     ├── .python-version
     ├── Dockerfile
     ├── fly.toml
     ├── README.md
-    ├── RENDER_DEPLOY.md
     ├── requirements.txt
     ├── runtime.txt
     └── app
@@ -129,16 +160,16 @@ Get-PSTree -Recurse -Exclude "node_modules", ".venv", "__pycache__" | Select-Obj
 
 <!-- EDIT THIS AFTER TECH STACK FINALLING -->
 
-<!-- ### Machine Learning
+### Machine Learning
 - **Python** - Core ML development
+- **Pickle** - Reading & writing of the model
 - **Scikit-learn** - Model training and evaluation
 - **Pandas & NumPy** - Data processing and analysis
-- **TensorFlow/PyTorch** - Deep learning models (if applicable)
+- **TensorFlow** - Deep learning models 
 
 ### Backend
-- **Flask/FastAPI** - API framework
-- **SQLite/PostgreSQL** - Data storage
-- **Joblib/Pickle** - Model serialization -->
+- **FastAPI** - API framework
+- **Joblib/Pickle** - Model serialization
 
 ### Frontend
 - **React** - User interface
@@ -146,7 +177,11 @@ Get-PSTree -Recurse -Exclude "node_modules", ".venv", "__pycache__" | Select-Obj
 - **Axios** - API communication
 <!-- - **Chart.js/D3.js** - Data visualization -->
 
-- More tech stack will be revealed soon.
+### Deployment
+- **Frontend** - [Vercel](https://vercel.com)
+- **Backend** - [Render](https://render.com/)
+<!-- - **Chart.js/D3.js** - Data visualization -->
+
 
 <!-- ### DevOps
 - **Git** - Version control
@@ -164,7 +199,7 @@ Get-PSTree -Recurse -Exclude "node_modules", ".venv", "__pycache__" | Select-Obj
 <!-- ```bash
 # Clone the repository
 git clone https://github.com/shivamm-verma/AAI_Risk-analysis_Fault-Prediction.git
-cd <project-directory>
+cd AAI_Risk-analysis_Fault-Prediction
 
 # Install dependencies
 pip install -r requirements.txt
