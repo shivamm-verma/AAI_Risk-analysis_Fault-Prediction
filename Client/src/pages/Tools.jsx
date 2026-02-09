@@ -17,7 +17,7 @@ const ANALYSIS_TYPES = {
   rul: {
     label: 'Remaining Useful Life (RUL)',
     description: 'Predicts remaining operational cycles for engines using LSTM deep learning',
-    modelName: 'rul_lstm_model',
+    modelName: 'remainingUsefulLife_lstm',
     requiredFields: [
       'UnitNumber',
       'Cycle',
@@ -82,7 +82,7 @@ const ANALYSIS_TYPES = {
   engine_risk: {
     label: 'Engine Risk Assessment',
     description: 'Comprehensive engine performance and risk analysis',
-    modelName: 'engine_risk',
+    modelName: 'engine_maintenance_model',
     requiredFields: [
       'Engine_ID',
       'Temperature',
