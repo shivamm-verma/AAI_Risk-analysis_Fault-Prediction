@@ -607,7 +607,7 @@ function Tools() {
                 </span>
                 <p className="mt-2 text-xs text-blue-600 hover:text-blue-800">
                   <a 
-                    href="https://github.com/shivamm-verma/AAI_Risk-analysis_Fault-Prediction/tree/main/Model/SAMPLE_DATA" 
+                    href="https://github.com/shivamm-verma/AAI_Risk-analysis_Fault-Prediction/tree/main/Model/sample_data" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 underline"
